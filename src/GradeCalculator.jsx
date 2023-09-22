@@ -26,7 +26,9 @@ function GradeCalculator() {
   const [average, setAverage] = useState();
   const [averageGrade, setAverageGrade] = useState();
 
+  const [selectedRow, setSelectedRow] = useState();
   const [visible, setVisible] = useState(false);
+  const [borderRedRow, setBorderRedRow] = useState([]);
   const style30 = {
     width: "30px",
     borderLeft: "1px solid rgba(224, 224, 224, 1)",
@@ -67,6 +69,7 @@ function GradeCalculator() {
   };
 
   const handleInputChange = (e, index) => {
+    setVisible(false);
     var { name, value } = e.target;
     if (value === "Pass" || value === "NonePass") {
       name = "grade";
@@ -77,6 +80,15 @@ function GradeCalculator() {
 
     if (name !== "grade") {
       newCourses[index].grade = CalculateGrade(newCourses[index].totalScore);
+    }
+
+    if (
+      newCourses[index].grade === "F" ||
+      newCourses[index].grade === "NonePass"
+    ) {
+      const newRows = [...borderRedRow];
+      newRows.push(index);
+      setBorderRedRow(newRows);
     }
     setCourses(newCourses);
   }; //한 행에서 이뤄지는 값의 변화들을 다루는 함수
@@ -112,6 +124,11 @@ function GradeCalculator() {
     }
   } //A+ , A, B+ ... 계산하는 함수
 
+  const OnClickRow = (index) => {
+    console.log(index);
+    setSelectedRow(index);
+  };
+
   const handleDelete = (index) => {
     const newCourses = [...courses];
     newCourses.splice(index, 1);
@@ -119,9 +136,13 @@ function GradeCalculator() {
   };
 
   const OnClickSave = () => {
-    setVisible(true);
-    CheckError(courses);
-    sortCourses();
+    if (CheckError(courses) !== "") {
+      alert(CheckError(courses));
+    } else {
+      setVisible(true);
+      CheckError(courses);
+      sortCourses();
+    }
   };
 
   const sortCourses = () => {
@@ -189,7 +210,7 @@ function GradeCalculator() {
         <Button
           variant="contained"
           color="default"
-          onClick={() => handleDelete(courses.length - 1)}
+          onClick={() => handleDelete(selectedRow)}
         >
           삭제
         </Button>
@@ -239,9 +260,20 @@ function GradeCalculator() {
           <TableBody>
             {courses.map((course, index) => (
               <TableRow
+                onClick={() => OnClickRow(index)}
                 key={index}
                 style={
-                  index % 2 === 0
+                  index === selectedRow
+                    ? index % 2 === 0
+                      ? {
+                          backgroundColor: "#F6F8FA",
+                          boxShadow: "4px 1px 1px 1px grey inset",
+                        }
+                      : {
+                          backgroundColor: "#EBEDF0",
+                          boxShadow: "4px 1px 1px 1px grey inset",
+                        }
+                    : index % 2 === 0
                     ? {
                         backgroundColor: "#F6F8FA",
                       }
@@ -274,9 +306,9 @@ function GradeCalculator() {
                     </Select>
                   </FormControl>
                 </TableCell>
-                <TableCell align="center" style={stylelong}>
+                <TableCell align="left" style={stylelong}>
                   <TextField
-                    inputProps={{ style: { textAlign: "center" } }}
+                    inputProps={{ style: { textAlign: "left" } }}
                     name="name"
                     value={course.name}
                     onChange={(e) => handleInputChange(e, index)}
@@ -363,7 +395,14 @@ function GradeCalculator() {
                   )}
                 </TableCell>
                 <TableCell align="center" style={{ width: "58px" }}></TableCell>
-                <TableCell align="center" style={{ width: "58px" }}>
+                <TableCell
+                  align="center"
+                  style={
+                    borderRedRow.includes(index)
+                      ? { color: "red", width: "58px" }
+                      : { width: "58px" }
+                  }
+                >
                   {course.credit === "1" ? (
                     <Select
                       onChange={(e) => {
@@ -409,13 +448,73 @@ function GradeCalculator() {
 
 const CheckError = (target) => {
   /*checklist
-    1. 과목명(name)이 겹치는지
-    2. 입력 항목이 비어있는 곳이 있는지
-    3. 출석점수, 과제점수가 0보다 작거나 20점을 넘기는지
-    4. 학점이 0보다 작은지
-    5. 과목별 총점이 0보다 작거나 100보다 큰지.
+    1. 입력 항목이 비어있는 곳이 있는지
+    2. 과목명(name)이 겹치는지
+    3. 학점이 0보다 작은지
+    4. 출석점수, 과제점수가 0보다 작거나 20점보다 큰지
+    5. 중간, 기말 점수가 0보다 작거나 30점보다 큰지
+    6. 과목별 총점이 0보다 작거나 100보다 큰지.
   */
-  console.log(target);
-}
+
+  let err = "";
+
+  //1. 과목명(name)이 겹치는지
+  var hasEmptyValue = false;
+
+  for (let i = 0; i < target.length; i++) {
+    var values = target[i];
+    hasEmptyValue = Object.values(values).some(
+      (value) => value === "" || value === null || value === undefined
+    );
+  }
+  if (hasEmptyValue) {
+    err = "입력하지 않은 값이 존재합니다.";
+    return err;
+  }
+
+  //2. 과목명(name)이 겹치는지
+  for (let i = 0; i < target.length; i++) {
+    for (let j = i + 1; j < target.length; j++) {
+      if (target[i].name === target[j].name) {
+        err = "중복된 과목명이 존재합니다.";
+        return err;
+      }
+    }
+  }
+
+  //3. 학점이 0보다 작은지
+  //4. 출석점수, 과제점수가 0보다 작거나 20점을 넘기는지
+  //5. 중간, 기말 점수가 0보다 작거나 30점보다 큰지
+  //6. 과목별 총점이 0보다 작거나 100보다 큰지.
+  for (let i = 0; i < target.length; i++) {
+    if (Number(target[i].credit) < 0) {
+      err = "학점은 0 이상의 값을 입력해야 합니다.";
+    }
+    if (Number(target[i].attendance) < 0 || Number(target[i].attendance) > 20) {
+      err = "출석 점수는 0 - 20 사이의 값을 입력해주세요.";
+      return err;
+    }
+    if (Number(target[i].assignment) < 0 || Number(target[i].assignment) > 20) {
+      err = "과제 점수는 0 - 20 사이의 값을 입력해주세요.";
+      return err;
+    }
+    if (Number(target[i].midterm) < 0 || Number(target[i].midterm) > 30) {
+      err = "중간고사 점수는 0 - 30 사이의 값을 입력해주세요.";
+      return err;
+    }
+    if (Number(target[i].finalExam) < 0 || Number(target[i].finalExam) > 30) {
+      err = "기말고사 점수는 0 - 30 사이의 값을 입력해주세요.";
+      return err;
+    }
+    if (
+      Number(target[i].totalScore) < 0 ||
+      Number(target[i].totalScore) > 100
+    ) {
+      err = "총점이 0보다 작거나 100보다 큽니다.";
+    }
+  }
+
+  return err;
+};
 
 export default GradeCalculator;

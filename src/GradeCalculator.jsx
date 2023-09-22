@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-function GradeCalculator() {
+function GradeCalculator({ schoolYear }) {
   const [courses, setCourses] = useState([]);
 
   const [totalCredit, setTotalCredit] = useState();
@@ -28,7 +28,6 @@ function GradeCalculator() {
 
   const [selectedRow, setSelectedRow] = useState();
   const [visible, setVisible] = useState(false);
-  const [borderRedRow, setBorderRedRow] = useState([]);
   const style30 = {
     width: "30px",
     borderLeft: "1px solid rgba(224, 224, 224, 1)",
@@ -82,14 +81,6 @@ function GradeCalculator() {
       newCourses[index].grade = CalculateGrade(newCourses[index].totalScore);
     }
 
-    if (
-      newCourses[index].grade === "F" ||
-      newCourses[index].grade === "NonePass"
-    ) {
-      const newRows = [...borderRedRow];
-      newRows.push(index);
-      setBorderRedRow(newRows);
-    }
     setCourses(newCourses);
   }; //한 행에서 이뤄지는 값의 변화들을 다루는 함수
 
@@ -125,7 +116,6 @@ function GradeCalculator() {
   } //A+ , A, B+ ... 계산하는 함수
 
   const OnClickRow = (index) => {
-    console.log(index);
     setSelectedRow(index);
   };
 
@@ -193,7 +183,7 @@ function GradeCalculator() {
     <div style={{ margin: "50px 50px 0px 50px" }}>
       <div style={{ float: "left" }}>
         <Typography variant="h4" gutterBottom>
-          1학년
+          {schoolYear}
         </Typography>
       </div>
       <div
@@ -398,9 +388,7 @@ function GradeCalculator() {
                 <TableCell
                   align="center"
                   style={
-                    borderRedRow.includes(index)
-                      ? { color: "red", width: "58px" }
-                      : { width: "58px" }
+                    course.grade === "F" ? { color: "red" } : { color: "black" }
                   }
                 >
                   {course.credit === "1" ? (
@@ -487,7 +475,7 @@ const CheckError = (target) => {
   //5. 중간, 기말 점수가 0보다 작거나 30점보다 큰지
   //6. 과목별 총점이 0보다 작거나 100보다 큰지.
   for (let i = 0; i < target.length; i++) {
-    if (Number(target[i].credit) < 0) {
+    if (Number(target[i].credit) <= 0) {
       err = "학점은 0 이상의 값을 입력해야 합니다.";
     }
     if (Number(target[i].attendance) < 0 || Number(target[i].attendance) > 20) {

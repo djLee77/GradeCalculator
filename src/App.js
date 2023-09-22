@@ -1,15 +1,13 @@
 import React from 'react';
 import GradeCalculator from './GradeCalculator';
-import GradeCalculator2 from './GradeCalculator2';
-import GradeCalculator3 from './GradeCalculator3';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <GradeCalculator />
-      <GradeCalculator2 />
-      <GradeCalculator3 />
+      <GradeCalculator schoolYear = "1학년"/>
+      <GradeCalculator schoolYear = "2학년"/>
+      <GradeCalculator schoolYear = "3학년"/>
     </div>
   );
 }

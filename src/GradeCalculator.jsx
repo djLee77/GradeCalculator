@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-function GradeCalculator({ schoolYear }) {
+function GradeCalculator({schoolYear }) {
   const [courses, setCourses] = useState([]);
 
   const [totalCredit, setTotalCredit] = useState();
@@ -148,6 +148,7 @@ function GradeCalculator({ schoolYear }) {
     setCourses(sortedArray);
   };
   useEffect(() => {
+    
     var credit = 0;
     var attend = 0;
     var assign = 0;
@@ -446,7 +447,7 @@ const CheckError = (target) => {
 
   let err = "";
 
-  //1. 과목명(name)이 겹치는지
+  //1. 입력 항목이 비어있는 곳이 있는지
   var hasEmptyValue = false;
 
   for (let i = 0; i < target.length; i++) {
@@ -469,7 +470,7 @@ const CheckError = (target) => {
       }
     }
   }
-
+  
   //3. 학점이 0보다 작은지
   //4. 출석점수, 과제점수가 0보다 작거나 20점을 넘기는지
   //5. 중간, 기말 점수가 0보다 작거나 30점보다 큰지

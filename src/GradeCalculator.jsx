@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-function GradeCalculator({schoolYear }) {
+function GradeCalculator({ schoolYear }) {
   const [courses, setCourses] = useState([]);
 
   const [totalCredit, setTotalCredit] = useState();
@@ -68,7 +68,6 @@ function GradeCalculator({schoolYear }) {
   };
 
   const handleInputChange = (e, index) => {
-    setVisible(false);
     var { name, value } = e.target;
     if (value === "Pass" || value === "NonePass") {
       name = "grade";
@@ -126,12 +125,39 @@ function GradeCalculator({schoolYear }) {
   };
 
   const OnClickSave = () => {
-    if (CheckError(courses) !== "") {
-      alert(CheckError(courses));
-    } else {
+    if (CheckError(courses)){
       setVisible(true);
       CheckError(courses);
       sortCourses();
+      var credit = 0;
+      var attend = 0;
+      var assign = 0;
+      var midterm = 0;
+      var final = 0;
+      var total = 0;
+      var cnt = 0;
+      for (let i = 0; i < courses.length; i++) {
+        if (courses[i].grade === "Pass") {
+          credit++;
+        }
+        if (Number(courses[i].totalScore) > 59) {
+          cnt++;
+          credit += Number(courses[i].credit);
+          attend += Number(courses[i].attendance);
+          assign += Number(courses[i].assignment);
+          midterm += Number(courses[i].midterm);
+          final += Number(courses[i].finalExam);
+          total += Number(courses[i].totalScore);
+        }
+      }
+      setTotalCredit(credit);
+      setTotalAttend(attend);
+      setTotalAssign(assign);
+      setTotalMideterm(midterm);
+      setTotalFinal(final);
+      setTotalofTotal(total);
+      setAverage(total / cnt);
+      setAverageGrade(CalculateGrade(total / cnt));
     }
   };
 
@@ -146,39 +172,7 @@ function GradeCalculator({schoolYear }) {
       return 0;
     });
     setCourses(sortedArray);
-  };
-  useEffect(() => {
-    
-    var credit = 0;
-    var attend = 0;
-    var assign = 0;
-    var midterm = 0;
-    var final = 0;
-    var total = 0;
-    var cnt = 0;
-    for (let i = 0; i < courses.length; i++) {
-      if (courses[i].grade === "Pass") {
-        credit++;
-      }
-      if (Number(courses[i].totalScore) > 59) {
-        cnt++;
-        credit += Number(courses[i].credit);
-        attend += Number(courses[i].attendance);
-        assign += Number(courses[i].assignment);
-        midterm += Number(courses[i].midterm);
-        final += Number(courses[i].finalExam);
-        total += Number(courses[i].totalScore);
-      }
-    }
-    setTotalCredit(credit);
-    setTotalAttend(attend);
-    setTotalAssign(assign);
-    setTotalMideterm(midterm);
-    setTotalFinal(final);
-    setTotalofTotal(total);
-    setAverage(total / cnt);
-    setAverageGrade(CalculateGrade(total / cnt));
-  }, [courses]); // 저장 버튼을 누를시 보여질 항목들
+  }; // 저장 버튼을 누를시 보여질 항목들
 
   return (
     <div style={{ margin: "50px 50px 0px 50px" }}>
@@ -393,14 +387,18 @@ function GradeCalculator({schoolYear }) {
                   }
                 >
                   {course.credit === "1" ? (
-                    <Select
-                      onChange={(e) => {
-                        handleInputChange(e, index);
-                      }}
-                    >
-                      <MenuItem value="Pass">Pass</MenuItem>
-                      <MenuItem value="NonePass">None Pass</MenuItem>
-                    </Select>
+                    visible ? (
+                      course.grade
+                    ) : (
+                      <Select
+                        onChange={(e) => {
+                          handleInputChange(e, index);
+                        }}
+                      >
+                        <MenuItem value="Pass">Pass</MenuItem>
+                        <MenuItem value="NonePass">None Pass</MenuItem>
+                      </Select>
+                    )
                   ) : visible ? (
                     course.grade
                   ) : (
@@ -445,8 +443,6 @@ const CheckError = (target) => {
     6. 과목별 총점이 0보다 작거나 100보다 큰지.
   */
 
-  let err = "";
-
   //1. 입력 항목이 비어있는 곳이 있는지
   var hasEmptyValue = false;
 
@@ -457,53 +453,55 @@ const CheckError = (target) => {
     );
   }
   if (hasEmptyValue) {
-    err = "입력하지 않은 값이 존재합니다.";
-    return err;
+    alert("입력하지 않은 값이 존재합니다.");
+    return false;
   }
 
   //2. 과목명(name)이 겹치는지
   for (let i = 0; i < target.length; i++) {
     for (let j = i + 1; j < target.length; j++) {
       if (target[i].name === target[j].name) {
-        err = "중복된 과목명이 존재합니다.";
-        return err;
+        alert("중복된 과목명이 존재합니다.");
+        return false;
       }
     }
   }
-  
+
   //3. 학점이 0보다 작은지
   //4. 출석점수, 과제점수가 0보다 작거나 20점을 넘기는지
   //5. 중간, 기말 점수가 0보다 작거나 30점보다 큰지
   //6. 과목별 총점이 0보다 작거나 100보다 큰지.
   for (let i = 0; i < target.length; i++) {
     if (Number(target[i].credit) <= 0) {
-      err = "학점은 0 이상의 값을 입력해야 합니다.";
+      alert("학점은 0 이상의 값을 입력해야 합니다.");
+      return false;
     }
     if (Number(target[i].attendance) < 0 || Number(target[i].attendance) > 20) {
-      err = "출석 점수는 0 - 20 사이의 값을 입력해주세요.";
-      return err;
+      alert("출석 점수는 0 - 20 사이의 값을 입력해주세요.");
+      return false;
     }
     if (Number(target[i].assignment) < 0 || Number(target[i].assignment) > 20) {
-      err = "과제 점수는 0 - 20 사이의 값을 입력해주세요.";
-      return err;
+      alert("과제 점수는 0 - 20 사이의 값을 입력해주세요.");
+      return false;
     }
     if (Number(target[i].midterm) < 0 || Number(target[i].midterm) > 30) {
-      err = "중간고사 점수는 0 - 30 사이의 값을 입력해주세요.";
-      return err;
+      alert("중간고사 점수는 0 - 30 사이의 값을 입력해주세요.");
+      return false;
     }
     if (Number(target[i].finalExam) < 0 || Number(target[i].finalExam) > 30) {
-      err = "기말고사 점수는 0 - 30 사이의 값을 입력해주세요.";
-      return err;
+      alert("기말고사 점수는 0 - 30 사이의 값을 입력해주세요.");
+      return false;
     }
     if (
       Number(target[i].totalScore) < 0 ||
       Number(target[i].totalScore) > 100
     ) {
-      err = "총점이 0보다 작거나 100보다 큽니다.";
+      alert("총점이 0보다 작거나 100보다 큽니다.");
+      return false;
     }
   }
 
-  return err;
+  return true;
 };
 
 export default GradeCalculator;

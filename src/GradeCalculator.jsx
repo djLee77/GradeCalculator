@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, createRef } from "react";
 import {
   Table,
   TableBody,
@@ -28,6 +28,21 @@ function GradeCalculator({ schoolYear }) {
 
   const [selectedRow, setSelectedRow] = useState();
   const [visible, setVisible] = useState(false);
+
+  const courseRefs = useRef(
+    courses.map(() => ({
+      type: createRef(),
+      essential: createRef(),
+      name: createRef(),
+      credit: createRef(),
+      attendance: createRef(),
+      assignment: createRef(),
+      midterm: createRef(),
+      finalExam: createRef(),
+      totalScore: createRef(),
+      grade: createRef(),
+    }))
+  );
   const style30 = {
     width: "30px",
     borderLeft: "1px solid rgba(224, 224, 224, 1)",
@@ -50,6 +65,21 @@ function GradeCalculator({ schoolYear }) {
     borderRight: "1px solid rgba(224, 224, 224, 1)",
   };
   const addCourse = () => {
+    const newRef = {
+      type: createRef(),
+      essential: createRef(),
+      name: createRef(),
+      credit: createRef(),
+      attendance: createRef(),
+      assignment: createRef(),
+      midterm: createRef(),
+      finalExam: createRef(),
+      totalScore: createRef(),
+      grade: createRef(),
+    };
+
+    courseRefs.current = [...courseRefs.current, newRef];
+
     setCourses([
       ...courses,
       {
@@ -125,7 +155,16 @@ function GradeCalculator({ schoolYear }) {
   };
 
   const OnClickSave = () => {
-    if (CheckError(courses)){
+    const validationResult = CheckError(courses);
+    if (validationResult.error) {
+      const errorIndex = validationResult.index;
+      const errorField = validationResult.field;
+      console.log(
+        "Error field : " + errorField + ", Error index : " + errorIndex
+      );
+      courseRefs.current[errorIndex][errorField].current.focus();
+      return;
+    } else {
       setVisible(true);
       CheckError(courses);
       sortCourses();
@@ -293,6 +332,7 @@ function GradeCalculator({ schoolYear }) {
                 </TableCell>
                 <TableCell align="left" style={stylelong}>
                   <TextField
+                    inputRef={courseRefs.current[index].name}
                     inputProps={{ style: { textAlign: "left" } }}
                     name="name"
                     value={course.name}
@@ -301,6 +341,7 @@ function GradeCalculator({ schoolYear }) {
                 </TableCell>
                 <TableCell align="center" style={style30}>
                   <TextField
+                    inputRef={courseRefs.current[index].credit}
                     inputProps={{ style: { textAlign: "center" } }}
                     name="credit"
                     value={course.credit}
@@ -315,6 +356,7 @@ function GradeCalculator({ schoolYear }) {
                     <div></div>
                   ) : (
                     <TextField
+                      inputRef={courseRefs.current[index].attendance}
                       inputProps={{ style: { textAlign: "center" } }}
                       name="attendance"
                       value={course.attendance}
@@ -330,6 +372,7 @@ function GradeCalculator({ schoolYear }) {
                   ) : (
                     <div>
                       <TextField
+                        inputRef={courseRefs.current[index].assignment}
                         inputProps={{ style: { textAlign: "center" } }}
                         name="assignment"
                         value={course.assignment}
@@ -347,6 +390,7 @@ function GradeCalculator({ schoolYear }) {
                   ) : (
                     <div>
                       <TextField
+                        inputRef={courseRefs.current[index].midterm}
                         inputProps={{ style: { textAlign: "center" } }}
                         name="midterm"
                         value={course.midterm}
@@ -364,6 +408,7 @@ function GradeCalculator({ schoolYear }) {
                   ) : (
                     <div>
                       <TextField
+                        inputRef={courseRefs.current[index].finalExam}
                         inputProps={{ style: { textAlign: "center" } }}
                         name="finalExam"
                         value={course.finalExam}
@@ -434,74 +479,70 @@ function GradeCalculator({ schoolYear }) {
 }
 
 const CheckError = (target) => {
-  /*checklist
-    1. 입력 항목이 비어있는 곳이 있는지
-    2. 과목명(name)이 겹치는지
-    3. 학점이 0보다 작은지
-    4. 출석점수, 과제점수가 0보다 작거나 20점보다 큰지
-    5. 중간, 기말 점수가 0보다 작거나 30점보다 큰지
-    6. 과목별 총점이 0보다 작거나 100보다 큰지.
-  */
-
-  //1. 입력 항목이 비어있는 곳이 있는지
-  var hasEmptyValue = false;
-
+  // 1. 입력 항목이 비어있는지 확인
   for (let i = 0; i < target.length; i++) {
-    var values = target[i];
-    hasEmptyValue = Object.values(values).some(
-      (value) => value === "" || value === null || value === undefined
-    );
-  }
-  if (hasEmptyValue) {
-    alert("입력하지 않은 값이 존재합니다.");
-    return false;
-  }
-
-  //2. 과목명(name)이 겹치는지
-  for (let i = 0; i < target.length; i++) {
-    for (let j = i + 1; j < target.length; j++) {
-      if (target[i].name === target[j].name) {
-        alert("중복된 과목명이 존재합니다.");
-        return false;
+    const values = Object.entries(target[i]);
+    for (let [key, value] of values) {
+      if (value === "" || value === null || value === undefined) {
+        alert("비어있는 항목이 존재합니다.");
+        return { error: true, index: i, field: key };
       }
     }
   }
 
-  //3. 학점이 0보다 작은지
-  //4. 출석점수, 과제점수가 0보다 작거나 20점을 넘기는지
-  //5. 중간, 기말 점수가 0보다 작거나 30점보다 큰지
-  //6. 과목별 총점이 0보다 작거나 100보다 큰지.
+  // 2. 과목명(name) 중복 확인
+  for (let i = 0; i < target.length; i++) {
+    for (let j = i + 1; j < target.length; j++) {
+      if (target[i].name === target[j].name) {
+        alert("중복된 과목명이 존재합니다.");
+        return { error: true, index: i, field: "name" };
+      }
+    }
+  }
+
+  // 3. 학점이 0보다 작은지 확인
   for (let i = 0; i < target.length; i++) {
     if (Number(target[i].credit) <= 0) {
-      alert("학점은 0 이상의 값을 입력해야 합니다.");
-      return false;
+      alert("학점은 반드시 1점 이상이어야 합니다.");
+      return { error: true, index: i, field: "credit" };
     }
+  }
+
+  // 4. 출석점수, 과제점수 확인
+  for (let i = 0; i < target.length; i++) {
     if (Number(target[i].attendance) < 0 || Number(target[i].attendance) > 20) {
-      alert("출석 점수는 0 - 20 사이의 값을 입력해주세요.");
-      return false;
+      alert("출석점수는 0점이상 20점이하로 입력해주세요.");
+      return { error: true, index: i, field: "attendance" };
     }
     if (Number(target[i].assignment) < 0 || Number(target[i].assignment) > 20) {
-      alert("과제 점수는 0 - 20 사이의 값을 입력해주세요.");
-      return false;
+      alert("과제점수는 0점이상 20점이하로 입력해주세요.");
+      return { error: true, index: i, field: "assignment" };
     }
+  }
+
+  // 5. 중간, 기말 점수 확인
+  for (let i = 0; i < target.length; i++) {
     if (Number(target[i].midterm) < 0 || Number(target[i].midterm) > 30) {
-      alert("중간고사 점수는 0 - 30 사이의 값을 입력해주세요.");
-      return false;
+      alert("중간고사 점수는 0점이상 30점이하로 입력해주세요.");
+      return { error: true, index: i, field: "midterm" };
     }
     if (Number(target[i].finalExam) < 0 || Number(target[i].finalExam) > 30) {
-      alert("기말고사 점수는 0 - 30 사이의 값을 입력해주세요.");
-      return false;
+      alert("기말고사 점수는 0점이상 30점이하로 입력해주세요.");
+      return { error: true, index: i, field: "finalExam" };
     }
+  }
+
+  // 6. 과목별 총점 확인
+  for (let i = 0; i < target.length; i++) {
     if (
       Number(target[i].totalScore) < 0 ||
       Number(target[i].totalScore) > 100
     ) {
-      alert("총점이 0보다 작거나 100보다 큽니다.");
-      return false;
+      return { error: true, index: i, field: "totalScore" };
     }
   }
 
-  return true;
+  return { error: false };
 };
 
 export default GradeCalculator;

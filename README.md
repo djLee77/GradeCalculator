@@ -1,70 +1,16 @@
-# Getting Started with Create React App
+# 📚 학점 계산기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📖 소개
 
-## Available Scripts
+이 프로젝트는 React와 Material-UI를 기반으로 만든 학점 계산기입니다. 학생들은 수강한 과목의 성적 정보를 입력하여 평균 학점과 전체 학점을 계산할 수 있습니다.
 
-In the project directory, you can run:
+## ✨ 주요 기능
 
-### `npm start`
+- **과목 추가 및 삭제**: 사용자는 새로운 과목을 추가하거나 기존 과목을 삭제할 수 있습니다.
+- **성적 입력 및 계산**: 각 과목에 대해 다양한 성적 항목을 입력하고, 이를 기반으로 총점과 평균 학점을 계산합니다.
+- **입력 검증**: 사용자의 입력을 검증하여, 잘못된 값이나 누락된 정보가 없는지 확인합니다.
+- **정렬된 출력**: 입력된 과목 정보를 특정 기준에 따라 정렬하여 출력합니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📜 사용 방법
+- **아래 링크를 통해 직접 사용해 볼 수 있습니다.**
+- https://djlee77.github.io/GradeCalculator/

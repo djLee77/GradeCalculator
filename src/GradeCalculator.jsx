@@ -177,7 +177,7 @@ function GradeCalculator({ schoolYear }) {
       setTotalMideterm(midterm);
       setTotalFinal(final);
       setTotalofTotal(total);
-      setAverage(total / cnt);
+      setAverage((Math.round(total / cnt * 100) / 100).toFixed(2));
       setAverageGrade(CalculateGrade(total / cnt));
     }
   };

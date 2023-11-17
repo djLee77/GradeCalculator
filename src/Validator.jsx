@@ -15,7 +15,7 @@ const Validator = (target) => {
     for (let j = i + 1; j < target.length; j++) {
       if (target[i].name === target[j].name) {
         alert("중복된 과목명이 존재합니다.");
-        return { error: true, index: i, field: "name" };
+        return { error: true, index: target.length-1, field: "name" };
       }
     }
   }

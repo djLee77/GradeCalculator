@@ -1,0 +1,26 @@
+.style30 {
+  width: 30px;
+  border-left: 1px solid rgba(224, 224, 224, 1);
+  border-right: 1px solid rgba(224, 224, 224, 1);
+}
+
+.style58 {
+  width: 58px;
+  border-left: 1px solid rgba(224, 224, 224, 1);
+  border-right: 1px solid rgba(224, 224, 224, 1);
+}
+
+/* GradeCalculator.css */
+.styleHeader {
+  background-color: #1f2328 !important;
+  color: #ffffff !important;
+}
+
+.styleLong {
+  border-left: 1px solid rgba(224, 224, 224, 1);
+  border-right: 1px solid rgba(224, 224, 224, 1);
+}
+
+.width58 {
+  width: 58px;
+}

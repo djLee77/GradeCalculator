@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import Validator from "./Validator.jsx";
+import "./GradeCalculator.css";
 
 function GradeCalculator({ schoolYear }) {
   const [courses, setCourses] = useState([]);
@@ -44,27 +45,6 @@ function GradeCalculator({ schoolYear }) {
       grade: createRef(),
     }))
   );
-  const style30 = {
-    width: "30px",
-    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-    borderRight: "1px solid rgba(224, 224, 224, 1)",
-  };
-
-  const style58 = {
-    width: "58px",
-    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-    borderRight: "1px solid rgba(224, 224, 224, 1)",
-  };
-
-  const styleHeader = {
-    backgroundColor: "#1F2328",
-    color: "#FFFFFF",
-  };
-
-  const stylelong = {
-    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-    borderRight: "1px solid rgba(224, 224, 224, 1)",
-  };
   const addCourse = () => {
     const newRef = {
       type: createRef(),
@@ -247,37 +227,37 @@ function GradeCalculator({ schoolYear }) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 이수
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 필수
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 과목명
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 학점
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 출석점수
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 과제점수
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 중간고사
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 기말고사
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 총점
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 평균
               </TableCell>
-              <TableCell align="center" style={styleHeader}>
+              <TableCell align="center" className="styleHeader">
                 성적
               </TableCell>
             </TableRow>
@@ -305,7 +285,7 @@ function GradeCalculator({ schoolYear }) {
                     : { backgroundColor: "#EBEDF0" }
                 }
               >
-                <TableCell align="center" style={style30}>
+                <TableCell align="center" className="style30">
                   <FormControl>
                     <InputLabel>이수</InputLabel>
                     <Select
@@ -318,7 +298,7 @@ function GradeCalculator({ schoolYear }) {
                     </Select>
                   </FormControl>
                 </TableCell>
-                <TableCell align="center" style={style30}>
+                <TableCell align="center" className="style30">
                   <FormControl>
                     <InputLabel>필수</InputLabel>
                     <Select
@@ -331,7 +311,7 @@ function GradeCalculator({ schoolYear }) {
                     </Select>
                   </FormControl>
                 </TableCell>
-                <TableCell align="left" style={stylelong}>
+                <TableCell align="left" className="stylelong">
                   <TextField
                     inputRef={courseRefs.current[index].name}
                     inputProps={{ style: { textAlign: "left" } }}
@@ -340,7 +320,7 @@ function GradeCalculator({ schoolYear }) {
                     onChange={(e) => handleInputChange(e, index)}
                   />
                 </TableCell>
-                <TableCell align="center" style={style30}>
+                <TableCell align="center" className="style30">
                   <TextField
                     inputRef={courseRefs.current[index].credit}
                     inputProps={{ style: { textAlign: "center" } }}
@@ -351,7 +331,9 @@ function GradeCalculator({ schoolYear }) {
                 </TableCell>
                 <TableCell
                   align="center"
-                  style={course.credit === "1" ? { width: "58px" } : style58}
+                  className={
+                    course.credit === "1" ? { width: "width58" } : "style58"
+                  }
                 >
                   {course.credit === "1" ? (
                     <div></div>
@@ -366,7 +348,9 @@ function GradeCalculator({ schoolYear }) {
                   )}
                 </TableCell>
                 <TableCell
-                  style={course.credit === "1" ? { width: "58px" } : style58}
+                  className={
+                    course.credit === "1" ? { width: "width58" } : "style58"
+                  }
                 >
                   {course.credit === "1" ? (
                     <div></div>
@@ -384,7 +368,9 @@ function GradeCalculator({ schoolYear }) {
                 </TableCell>
                 <TableCell
                   align="center"
-                  style={course.credit === "1" ? { width: "58px" } : style58}
+                  className={
+                    course.credit === "1" ? { width: "width58" } : "style58"
+                  }
                 >
                   {course.credit === "1" ? (
                     <div></div>
@@ -402,7 +388,9 @@ function GradeCalculator({ schoolYear }) {
                 </TableCell>
                 <TableCell
                   align="center"
-                  style={course.credit === "1" ? { width: "58px" } : style58}
+                  className={
+                    course.credit === "1" ? { width: "width58" } : "style58"
+                  }
                 >
                   {course.credit === "1" ? (
                     <div></div>
@@ -418,7 +406,7 @@ function GradeCalculator({ schoolYear }) {
                     </div>
                   )}
                 </TableCell>
-                <TableCell align="center" style={style30}>
+                <TableCell align="center" className="style30">
                   {course.credit === "1" ? (
                     <div></div>
                   ) : (

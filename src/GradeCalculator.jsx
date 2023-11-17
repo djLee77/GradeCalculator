@@ -45,7 +45,8 @@ function GradeCalculator({ schoolYear }) {
       grade: createRef(),
     }))
   );
-  const addCourse = () => {
+  const onClickAddCourse = () => {
+    setVisible(false);
     const newRef = {
       type: createRef(),
       essential: createRef(),
@@ -209,7 +210,7 @@ function GradeCalculator({ schoolYear }) {
           marginRight: "4%",
         }}
       >
-        <Button variant="contained" color="default" onClick={addCourse}>
+        <Button variant="contained" color="default" onClick={onClickAddCourse}>
           추가
         </Button>
         <Button

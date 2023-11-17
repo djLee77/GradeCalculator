@@ -160,16 +160,19 @@ function GradeCalculator({ schoolYear }) {
       for (let i = 0; i < courses.length; i++) {
         if (courses[i].grade === "Pass") {
           credit++;
+          continue;
         }
-        if (Number(courses[i].totalScore) > 59) {
-          cnt++;
-          credit += Number(courses[i].credit);
-          attend += Number(courses[i].attendance);
-          assign += Number(courses[i].assignment);
-          midterm += Number(courses[i].midterm);
-          final += Number(courses[i].finalExam);
-          total += Number(courses[i].totalScore);
+        if (courses[i].grade === "NonePass") {
+          credit++;
+          continue;
         }
+        cnt++;
+        credit += Number(courses[i].credit);
+        attend += Number(courses[i].attendance);
+        assign += Number(courses[i].assignment);
+        midterm += Number(courses[i].midterm);
+        final += Number(courses[i].finalExam);
+        total += Number(courses[i].totalScore);
       }
       setTotalCredit(credit);
       setTotalAttend(attend);
@@ -177,7 +180,7 @@ function GradeCalculator({ schoolYear }) {
       setTotalMideterm(midterm);
       setTotalFinal(final);
       setTotalofTotal(total);
-      setAverage((Math.round(total / cnt * 100) / 100).toFixed(2));
+      setAverage((Math.round((total / cnt) * 100) / 100).toFixed(2));
       setAverageGrade(CalculateGrade(total / cnt));
     }
   };
@@ -344,6 +347,11 @@ function GradeCalculator({ schoolYear }) {
                       inputProps={{ style: { textAlign: "center" } }}
                       name="attendance"
                       value={course.attendance}
+                      error={
+                        course.attendance < 0 || course.attendance > 20 || isNaN(course.attendance)
+                          ? true
+                          : false
+                      }
                       onChange={(e) => handleInputChange(e, index)}
                     />
                   )}
@@ -362,6 +370,11 @@ function GradeCalculator({ schoolYear }) {
                         inputProps={{ style: { textAlign: "center" } }}
                         name="assignment"
                         value={course.assignment}
+                        error={
+                          course.assignment < 0 || course.assignment > 20 || isNaN(course.assignment)
+                            ? true
+                            : false
+                        }
                         onChange={(e) => handleInputChange(e, index)}
                       />
                     </div>
@@ -382,6 +395,11 @@ function GradeCalculator({ schoolYear }) {
                         inputProps={{ style: { textAlign: "center" } }}
                         name="midterm"
                         value={course.midterm}
+                        error={
+                          course.midterm < 0 || course.midterm > 30 || isNaN(course.midterm)
+                            ? true
+                            : false
+                        }
                         onChange={(e) => handleInputChange(e, index)}
                       />
                     </div>
@@ -402,6 +420,11 @@ function GradeCalculator({ schoolYear }) {
                         inputProps={{ style: { textAlign: "center" } }}
                         name="finalExam"
                         value={course.finalExam}
+                        error={
+                          course.finalExam < 0 || course.finalExam > 30 || isNaN(course.finalExam)
+                            ? true
+                            : false
+                        }
                         onChange={(e) => handleInputChange(e, index)}
                       />
                     </div>

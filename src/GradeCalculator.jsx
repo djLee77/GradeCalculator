@@ -321,6 +321,14 @@ function GradeCalculator({ schoolYear }) {
                     inputProps={{ style: { textAlign: "left" } }}
                     name="name"
                     value={course.name}
+                    error={
+                      courses
+                        .map((item) => item.name)
+                        .filter((element) => course.name === element).length >
+                        1 && course.name !== ""
+                        ? true
+                        : false
+                    }
                     onChange={(e) => handleInputChange(e, index)}
                   />
                 </TableCell>
@@ -348,7 +356,9 @@ function GradeCalculator({ schoolYear }) {
                       name="attendance"
                       value={course.attendance}
                       error={
-                        course.attendance < 0 || course.attendance > 20 || isNaN(course.attendance)
+                        course.attendance < 0 ||
+                        course.attendance > 20 ||
+                        isNaN(course.attendance)
                           ? true
                           : false
                       }
@@ -371,7 +381,9 @@ function GradeCalculator({ schoolYear }) {
                         name="assignment"
                         value={course.assignment}
                         error={
-                          course.assignment < 0 || course.assignment > 20 || isNaN(course.assignment)
+                          course.assignment < 0 ||
+                          course.assignment > 20 ||
+                          isNaN(course.assignment)
                             ? true
                             : false
                         }
@@ -396,7 +408,9 @@ function GradeCalculator({ schoolYear }) {
                         name="midterm"
                         value={course.midterm}
                         error={
-                          course.midterm < 0 || course.midterm > 30 || isNaN(course.midterm)
+                          course.midterm < 0 ||
+                          course.midterm > 30 ||
+                          isNaN(course.midterm)
                             ? true
                             : false
                         }
@@ -421,7 +435,9 @@ function GradeCalculator({ schoolYear }) {
                         name="finalExam"
                         value={course.finalExam}
                         error={
-                          course.finalExam < 0 || course.finalExam > 30 || isNaN(course.finalExam)
+                          course.finalExam < 0 ||
+                          course.finalExam > 30 ||
+                          isNaN(course.finalExam)
                             ? true
                             : false
                         }

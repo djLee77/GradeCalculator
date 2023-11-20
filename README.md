@@ -10,7 +10,7 @@
 ---
 
 ### 실행화면 - 2
-![실행화면2](/public/Animation2.gif)
+![실행화면2](/public/Animation.gif)
 
 ## ✨ 주요 기능
 

@@ -338,6 +338,12 @@ function GradeCalculator({ schoolYear }) {
                     inputProps={{ style: { textAlign: "center" } }}
                     name="credit"
                     value={course.credit}
+                    error={
+                      course.credit < 0 ||
+                      isNaN(course.credit)
+                        ? true
+                        : false
+                    }
                     onChange={(e) => handleInputChange(e, index)}
                   />
                 </TableCell>

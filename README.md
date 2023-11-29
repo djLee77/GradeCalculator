@@ -4,6 +4,12 @@
 
 이 프로젝트는 React와 Material-UI를 기반으로 만든 학점 계산기입니다. 학생들은 수강한 과목의 성적 정보를 입력하여 평균 학점과 전체 학점을 계산할 수 있습니다.
 
+## 기술 스택
+
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+
 ### 실행화면 - 1
 ![실행화면1](/public/Animation1.gif)
 
@@ -22,6 +28,4 @@
 ## 📜 사용하기
 - **아래 링크를 통해 직접 사용해 볼 수 있습니다.**
 - https://djlee77.github.io/GradeCalculator/
-
-## 사용된 라이브러리
 

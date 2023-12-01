@@ -27,5 +27,5 @@
 
 ## 📜 사용하기
 - **아래 링크를 통해 직접 사용해 볼 수 있습니다.**
-- https://djlee77.github.io/GradeCalculator/
+- https://djlee77.github.io/grade-calculator/
 
